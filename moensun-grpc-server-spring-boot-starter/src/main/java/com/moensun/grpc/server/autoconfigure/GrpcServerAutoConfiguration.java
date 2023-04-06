@@ -13,9 +13,9 @@ import org.springframework.context.annotation.Configuration;
 @RequiredArgsConstructor
 @Configuration
 @ConditionalOnBean(annotation = GrpcService.class)
-@EnableConfigurationProperties(value = {GrpcServerProperties.class})
+@EnableConfigurationProperties(value = {GrpcServerConfProperties.class})
 public class GrpcServerAutoConfiguration {
-    private final GrpcServerProperties serverProperties;
+    private final GrpcServerConfProperties serverProperties;
 
     @Bean
     public GrpcServerRunner grpcServerRunner(){
