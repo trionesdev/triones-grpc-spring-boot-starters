@@ -1,12 +1,10 @@
 package com.moensun.grpc.client.annotations;
 
-import org.springframework.stereotype.Component;
-
 import java.lang.annotation.*;
 
-@Target(ElementType.TYPE)
+@Target({ElementType.FIELD, ElementType.METHOD, ElementType.PARAMETER})
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
-@Component
+@Inherited
 public @interface GrpcClient {
 }
