@@ -10,6 +10,7 @@ import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.context.SmartLifecycle;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Field;
@@ -24,7 +25,7 @@ public class GrpcClientBeanPostProcessor implements BeanPostProcessor, SmartLife
 
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {
-
+        System.out.println(beanName);
         Class<?> clazz = bean.getClass();
         for (Field field : clazz.getDeclaredFields() ) {
            GrpcClient grpcClient = AnnotationUtils.findAnnotation(field, GrpcClient.class);
