@@ -5,15 +5,15 @@ import org.springframework.cloud.context.named.NamedContextFactory;
 import java.util.Arrays;
 import java.util.Objects;
 
-public class GrpcStubSpecification implements NamedContextFactory.Specification {
+public class GrpcChannelSpecification implements NamedContextFactory.Specification {
     private String name;
 
     private Class<?>[] configuration;
 
-    public GrpcStubSpecification() {
+    public GrpcChannelSpecification() {
     }
 
-    public GrpcStubSpecification(String name, Class<?>[] configuration) {
+    public GrpcChannelSpecification(String name, Class<?>[] configuration) {
         this.name = name;
         this.configuration = configuration;
     }
@@ -32,7 +32,7 @@ public class GrpcStubSpecification implements NamedContextFactory.Specification 
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        GrpcStubSpecification that = (GrpcStubSpecification) o;
+        GrpcChannelSpecification that = (GrpcChannelSpecification) o;
         return Objects.equals(name, that.name) &&
                 Arrays.equals(configuration, that.configuration);
     }

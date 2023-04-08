@@ -11,7 +11,6 @@ import org.springframework.stereotype.Service;
 @Service
 public class GrpcStubService {
 
-    @GrpcClient
     private final   GreeterGrpc.GreeterBlockingStub greeterBlockingStub;
 
     public void say(){

@@ -1,9 +1,13 @@
 package com.moensun.grpc.client;
 
+import cn.hutool.core.collection.CollectionUtil;
 import com.moensun.grpc.client.autoconfigure.GrpcStubConfProperties;
+import io.grpc.Grpc;
+import io.grpc.InsecureChannelCredentials;
 import io.grpc.ManagedChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.SmartLifecycle;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
 
 import java.util.HashMap;
@@ -54,16 +58,20 @@ public class GrpcClientLifecycle implements SmartLifecycle {
     }
 
     protected void createChannels() {
+        Grpc.newChannelBuilder("", InsecureChannelCredentials.create());
 //        Map<String, GrpcClientProperties> grpcClientPropertiesMap = grpcClientConfProperties.getMulti();
 //        if (CollectionUtil.isEmpty(grpcClientPropertiesMap)) {
 //            String target = grpcClientConfProperties.getAddress()+":"+grpcClientConfProperties.getPort();
 //            ManagedChannel channel = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
 //                    .build();
 //            channelMap.put(DEFAULT_GRPC_CLIENT_NAME,channel);
-//            AnnotationUtils.
+//
 //        } else {
 //
 //        }
+
+        AnnotationConfigApplicationContext  context ;
+//        context.re
     }
 
 

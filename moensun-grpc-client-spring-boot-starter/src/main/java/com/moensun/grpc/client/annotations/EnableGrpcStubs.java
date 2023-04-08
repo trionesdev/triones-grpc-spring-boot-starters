@@ -1,6 +1,6 @@
 package com.moensun.grpc.client.annotations;
 
-import com.moensun.grpc.client.GrpcStubRegister;
+import com.moensun.grpc.client.GrpcChannelsRegister;
 import org.springframework.context.annotation.Import;
 
 import java.lang.annotation.*;
@@ -8,7 +8,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Documented
-@Import(value = {GrpcStubRegister.class})
+@Import(value = {GrpcChannelsRegister.class})
 public @interface EnableGrpcStubs {
     String[] value() default {};
 
