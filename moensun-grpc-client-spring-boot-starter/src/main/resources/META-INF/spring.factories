@@ -1,2 +1,2 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.moensun.grpc.client.autoconfigure.GrpcClientAutoConfiguration
+com.moensun.grpc.client.autoconfigure.GrpcStubAutoConfiguration

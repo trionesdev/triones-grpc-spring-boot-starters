@@ -1,4 +1,4 @@
-package com.moensun.grpc.clientt;
+package com.moensun.grpc.client;
 
 import com.moensun.grpc.client.annotations.GrpcClient;
 import io.opentelemetry.example.grpc.GreeterGrpc;
@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 
 @RequiredArgsConstructor
 @Service
-public class GrpcClientService {
+public class GrpcStubService {
 
     @GrpcClient
     private final   GreeterGrpc.GreeterBlockingStub greeterBlockingStub;

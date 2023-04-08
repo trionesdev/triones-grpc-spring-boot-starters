@@ -1,6 +1,5 @@
-package com.moensun.grpc.clientt;
+package com.moensun.grpc.client;
 
-import com.moensun.grpc.client.GrpcRegister;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.config.BeanFactoryPostProcessor;
@@ -11,7 +10,7 @@ import org.springframework.context.annotation.Import;
 import org.springframework.core.env.Environment;
 
 @Configuration
-public class GrpcClientConfiguration {
+public class GrpcStubConfiguration {
 
 
     @Configuration
