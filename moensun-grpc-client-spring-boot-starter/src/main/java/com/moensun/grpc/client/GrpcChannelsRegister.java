@@ -2,6 +2,7 @@ package com.moensun.grpc.client;
 
 import com.moensun.grpc.client.annotations.EnableGrpcChannels;
 import com.moensun.grpc.client.annotations.GrpcChannel;
+import io.grpc.CallOptions;
 import io.grpc.Channel;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
@@ -14,6 +15,7 @@ import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
 import org.springframework.context.annotation.ImportBeanDefinitionRegistrar;
+import org.springframework.core.annotation.AnnotationUtils;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
@@ -21,10 +23,7 @@ import org.springframework.core.type.filter.AnnotationTypeFilter;
 import org.springframework.util.ClassUtils;
 import org.springframework.util.StringUtils;
 
-import java.util.HashSet;
-import java.util.LinkedHashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, ResourceLoaderAware, EnvironmentAware {
     private ResourceLoader resourceLoader;
@@ -117,7 +116,7 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         String className = annotationMetadata.getClassName();
         ConfigurableBeanFactory beanFactory = registry instanceof ConfigurableBeanFactory
                 ? (ConfigurableBeanFactory) registry : null;
-//        Class clazz = ClassUtils.resolveClassName(className, null);
+        Class<?> clazz = ClassUtils.resolveClassName(className, null);
         String name = getName(beanFactory,attributes);
         GrpcChannelFactoryBean factoryBean = new GrpcChannelFactoryBean();
         factoryBean.setName(name);
@@ -133,6 +132,30 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
 
         BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, null);
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
+
+//        GrpcChannel grpcChannel = AnnotationUtils.findAnnotation(clazz, GrpcChannel.class);
+//        Arrays.stream(grpcChannel.stubs()).forEach(stubClass->{
+//            GrpcStubFactoryBean stubFactoryBean = new GrpcStubFactoryBean();
+//            stubFactoryBean.setBeanFactory(beanFactory);
+//            stubFactoryBean.setType(stubClass);
+//
+//            BeanDefinitionBuilder stubBeanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(stubClass,()->{
+//                return stubFactoryBean.getObject();
+//            });
+//            AbstractBeanDefinition stubBeanDefinition = stubBeanDefinitionBuilder.getBeanDefinition();
+////            stubBeanDefinition.setAttribute("channel",beanDefinition);
+////            stubBeanDefinition.setAttribute("callOptions", CallOptions.DEFAULT);
+//            stubBeanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+//            stubBeanDefinition.setLazyInit(true);
+//
+//
+//            BeanDefinitionHolder holder1 = new BeanDefinitionHolder(stubBeanDefinition, stubClass.getSimpleName(), null);
+//            BeanDefinitionReaderUtils.registerBeanDefinition(holder1, registry);
+//
+//        });
+
+
+//        GrpcChannelContext context =  beanFactory.getBean(GrpcChannelContext.class);
 
     }
 

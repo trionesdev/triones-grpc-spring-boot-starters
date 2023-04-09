@@ -1,8 +1,7 @@
 package com.moensun.grpc.client;
 
 import io.grpc.Channel;
-import io.grpc.Grpc;
-import io.grpc.InsecureChannelCredentials;
+import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -43,8 +42,9 @@ public class GrpcChannelFactoryBean implements FactoryBean<Channel>, Initializin
     }
 
     protected ManagedChannelBuilder<?> grpcChannel(GrpcChannelContext context) {
-        ManagedChannelBuilder<?> builder = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
+        ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(target)
                 .usePlaintext();
+
         return builder;
     }
 
@@ -54,7 +54,10 @@ public class GrpcChannelFactoryBean implements FactoryBean<Channel>, Initializin
 //        GrpcChannelContext contextntext = applicationContext.getBean(GrpcChannelContext.class);
         ManagedChannelBuilder<?> builder = grpcChannel(context);
 
-        return builder.build();
+        ManagedChannel channel = builder.build();
+        context.registerChannel(name,channel);
+
+        return channel;
     }
 
 

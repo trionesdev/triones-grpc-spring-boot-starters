@@ -20,5 +20,5 @@ public @interface GrpcChannel {
 
     Class<?>[] configuration() default {};
 
-    Class<? extends AbstractStub>[] stubs() default {};
+    Class<?>[] stubs() default {};
 }

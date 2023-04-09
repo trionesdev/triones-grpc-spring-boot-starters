@@ -16,10 +16,10 @@ import org.springframework.core.env.Environment;
 public class GrpcStubConfiguration {
 
 
-    @Bean
-    public GreeterGrpc.GreeterBlockingStub greeterBlockingStub(Channel channel){
-        return GreeterGrpc.newBlockingStub(channel);
-    }
+//    @Bean
+//    public GreeterGrpc.GreeterBlockingStub greeterBlockingStub(Channel channel){
+//        return GreeterGrpc.newBlockingStub(channel);
+//    }
 
 //    @Configuration
 //    @Import(value = {AutoConfiguredRegistrar.class,GrpcRegister.class})

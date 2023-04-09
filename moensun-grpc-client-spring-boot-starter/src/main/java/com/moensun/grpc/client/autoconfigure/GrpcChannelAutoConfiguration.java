@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Slf4j
 @RequiredArgsConstructor
-@Configuration
+@Configuration(proxyBeanMethods = false)
 //@ConditionalOnBean(annotation = GrpcClient.class)
 @EnableConfigurationProperties(value = {GrpcStubConfProperties.class})
 public class GrpcChannelAutoConfiguration {

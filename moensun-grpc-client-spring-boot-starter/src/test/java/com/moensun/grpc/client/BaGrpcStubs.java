@@ -1,14 +1,12 @@
 package com.moensun.grpc.client;
 
 import com.moensun.grpc.client.annotations.GrpcChannel;
-import io.grpc.ManagedChannel;
 import io.opentelemetry.example.grpc.GreeterGrpc;
-import lombok.RequiredArgsConstructor;
 
 
-@GrpcChannel(name = "sddsss",stubs = {
-        GreeterGrpc.GreeterBlockingStub.class
+@GrpcChannel(name = "bgrpc-channel",stubs = {
+
 })
-public interface BeGrpcStubs {
+public interface BaGrpcStubs {
 //    private final ManagedChannel channel;
 }
