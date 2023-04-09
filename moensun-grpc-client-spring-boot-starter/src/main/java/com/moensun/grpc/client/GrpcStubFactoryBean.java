@@ -1,7 +1,10 @@
 package com.moensun.grpc.client;
 
 import io.grpc.Channel;
+import io.grpc.stub.AbstractAsyncStub;
 import io.grpc.stub.AbstractBlockingStub;
+import io.grpc.stub.AbstractFutureStub;
+import io.grpc.stub.AbstractStub;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.BeanFactoryAware;
@@ -13,12 +16,27 @@ import org.springframework.context.ApplicationContextAware;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
-public class GrpcStubFactoryBean implements FactoryBean<AbstractBlockingStub<?>>, InitializingBean,
+public class GrpcStubFactoryBean implements FactoryBean<Object>, InitializingBean,
         ApplicationContextAware, BeanFactoryAware {
 
+
     private Class<?> type;
-    private Channel channel;
+    private String name;
+    private String channelBeanName;
     private BeanFactory beanFactory;
+    private ApplicationContext applicationContext;
+
+    public void setChannelBeanName(String channelBeanName) {
+        this.channelBeanName = channelBeanName;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public void setType(Class<?> type) {
+        this.type = type;
+    }
 
     @Override
     public void setBeanFactory(BeanFactory beanFactory) throws BeansException {
@@ -26,7 +44,7 @@ public class GrpcStubFactoryBean implements FactoryBean<AbstractBlockingStub<?>>
     }
 
     @Override
-    public AbstractBlockingStub<?> getObject() {
+    public Object getObject() {
         return getTarget();
     }
 
@@ -42,13 +60,21 @@ public class GrpcStubFactoryBean implements FactoryBean<AbstractBlockingStub<?>>
 
     @Override
     public void setApplicationContext(ApplicationContext applicationContext) throws BeansException {
-
+        this.applicationContext = applicationContext;
     }
 
-    public AbstractBlockingStub<?> getTarget() {
+    public Object getTarget() {
+
         try {
-            Method newBlockingStub = type.getMethod("newBlockingStub", Channel.class);
-            return (AbstractBlockingStub<?>) newBlockingStub.invoke(null, channel);
+            Method newStubMethod;
+            if (AbstractBlockingStub.class.isAssignableFrom(type)) {
+                newStubMethod = type.getEnclosingClass().getMethod("newBlockingStub", Channel.class);
+            } else if (AbstractFutureStub.class.isAssignableFrom(type)) {
+                newStubMethod = type.getEnclosingClass().getMethod("newFutureStub", Channel.class);
+            } else {
+                newStubMethod = type.getEnclosingClass().getMethod("newStub", Channel.class);
+            }
+            return newStubMethod.invoke(null, beanFactory.getBean(channelBeanName, Channel.class));
         } catch (Exception ex) {
             throw new RuntimeException(ex);
         }

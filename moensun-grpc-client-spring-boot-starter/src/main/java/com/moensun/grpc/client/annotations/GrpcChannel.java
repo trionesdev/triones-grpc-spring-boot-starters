@@ -1,5 +1,6 @@
 package com.moensun.grpc.client.annotations;
 
+import io.grpc.stub.AbstractBlockingStub;
 import io.grpc.stub.AbstractStub;
 import org.springframework.core.annotation.AliasFor;
 
@@ -20,5 +21,5 @@ public @interface GrpcChannel {
 
     Class<?>[] configuration() default {};
 
-    Class<?>[] stubs() default {};
+    Class<? extends AbstractStub>[] stubs() default {};
 }
