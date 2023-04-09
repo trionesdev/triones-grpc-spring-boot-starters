@@ -1,13 +1,11 @@
 package com.moensun.grpc.client;
 
-import com.moensun.grpc.client.annotations.EnableGrpcStubs;
-import com.moensun.grpc.client.annotations.GrpcStubs;
+import com.moensun.grpc.client.annotations.EnableGrpcChannels;
+import com.moensun.grpc.client.annotations.GrpcChannel;
 import io.grpc.Channel;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinition;
-import org.springframework.beans.factory.config.BeanDefinitionHolder;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.beans.factory.config.*;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
@@ -32,6 +30,7 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
     private ResourceLoader resourceLoader;
 
     private Environment environment;
+
     @Override
     public void registerBeanDefinitions(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         registerDefaultConfiguration(metadata, registry);
@@ -49,38 +48,54 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
     }
 
 
-    private void registerDefaultConfiguration(AnnotationMetadata metadata, BeanDefinitionRegistry registry){
+    private void registerDefaultConfiguration(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
+        Map<String, Object> defaultAttrs = metadata.getAnnotationAttributes(EnableGrpcChannels.class.getName(), true);
 
+        if (defaultAttrs != null && defaultAttrs.containsKey("defaultConfiguration")) {
+            String name;
+            if (metadata.hasEnclosingClass()) {
+                name = "default." + metadata.getEnclosingClassName();
+            } else {
+                name = "default." + metadata.getClassName();
+            }
+            registerChannelConfiguration(registry, name, defaultAttrs.get("defaultConfiguration"));
+        }
     }
 
-    public void registerGrpcChannels(AnnotationMetadata metadata, BeanDefinitionRegistry registry){
+    static String getName(String name) {
+        if (!StringUtils.hasText(name)) {
+            return "";
+        }
+        return name;
+    }
+
+
+    public void registerGrpcChannels(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         LinkedHashSet<BeanDefinition> candidateComponents = new LinkedHashSet<>();
-        Map<String, Object> attrs = metadata.getAnnotationAttributes(EnableGrpcStubs.class.getName());
-        final Class<?>[] stubs = attrs == null ? null : (Class<?>[]) attrs.get("stubs");
+        Map<String, Object> attrs = metadata.getAnnotationAttributes(EnableGrpcChannels.class.getName());
+        final Class<?>[] stubs = attrs == null ? null : (Class<?>[]) attrs.get("channels");
         if (stubs == null || stubs.length == 0) {
             ClassPathScanningCandidateComponentProvider scanner = getScanner();
             scanner.setResourceLoader(this.resourceLoader);
-            scanner.addIncludeFilter(new AnnotationTypeFilter(GrpcStubs.class));
+            scanner.addIncludeFilter(new AnnotationTypeFilter(GrpcChannel.class));
             Set<String> basePackages = getBasePackages(metadata);
             for (String basePackage : basePackages) {
                 candidateComponents.addAll(scanner.findCandidateComponents(basePackage));
             }
-        }
-        else {
+        } else {
             for (Class<?> clazz : stubs) {
                 candidateComponents.add(new AnnotatedGenericBeanDefinition(clazz));
             }
         }
 
-        for (BeanDefinition candidateComponent : candidateComponents){
-            if (candidateComponent instanceof AnnotatedBeanDefinition ){
+        for (BeanDefinition candidateComponent : candidateComponents) {
+            if (candidateComponent instanceof AnnotatedBeanDefinition) {
                 AnnotatedBeanDefinition beanDefinition = (AnnotatedBeanDefinition) candidateComponent;
                 AnnotationMetadata annotationMetadata = beanDefinition.getMetadata();
                 Map<String, Object> attributes = annotationMetadata
-                        .getAnnotationAttributes(GrpcStubs.class.getCanonicalName());
-//                String name = getClientName(attributes);
-//                registerClientConfiguration(registry, name, attributes.get("configuration"));
-//
+                        .getAnnotationAttributes(GrpcChannel.class.getCanonicalName());
+                String name = getChannelName(attributes);
+                registerChannelConfiguration(registry, name, attributes.get("configuration"));
                 registerGrpcChannel(registry, annotationMetadata, attributes);
 
 //                AbstractBeanDefinition.
@@ -89,18 +104,27 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
 
     }
 
+    private void registerChannelConfiguration(BeanDefinitionRegistry registry, Object name, Object configuration) {
+        BeanDefinitionBuilder builder = BeanDefinitionBuilder.genericBeanDefinition(GrpcChannelSpecification.class);
+        builder.addConstructorArgValue(name);
+        builder.addConstructorArgValue(configuration);
+        registry.registerBeanDefinition(name + "." + GrpcChannelSpecification.class.getSimpleName(),
+                builder.getBeanDefinition());
+    }
 
     private void registerGrpcChannel(BeanDefinitionRegistry registry, AnnotationMetadata annotationMetadata,
-                                     Map<String, Object> attributes){
+                                     Map<String, Object> attributes) {
         String className = annotationMetadata.getClassName();
         ConfigurableBeanFactory beanFactory = registry instanceof ConfigurableBeanFactory
                 ? (ConfigurableBeanFactory) registry : null;
-        Class clazz = ClassUtils.resolveClassName(className, null);
+//        Class clazz = ClassUtils.resolveClassName(className, null);
+        String name = getName(beanFactory,attributes);
         GrpcChannelFactoryBean factoryBean = new GrpcChannelFactoryBean();
+        factoryBean.setName(name);
         factoryBean.setType(Channel.class);
         factoryBean.setBeanFactory(beanFactory);
         factoryBean.setTarget("localhost:50051");
-        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(Channel.class,()->{
+        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(Channel.class, () -> {
             return factoryBean.getObject();
         });
         AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
@@ -110,8 +134,6 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, null);
         BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
 
-        GrpcChannelContext context = beanFactory.getBean(GrpcChannelContext.class);
-        context.getContextNames();
     }
 
     protected ClassPathScanningCandidateComponentProvider getScanner() {
@@ -128,9 +150,10 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
             }
         };
     }
+
     protected Set<String> getBasePackages(AnnotationMetadata importingClassMetadata) {
         Map<String, Object> attributes = importingClassMetadata
-                .getAnnotationAttributes(EnableGrpcStubs.class.getCanonicalName());
+                .getAnnotationAttributes(EnableGrpcChannels.class.getCanonicalName());
 
         Set<String> basePackages = new HashSet<>();
         for (String pkg : (String[]) attributes.get("value")) {
@@ -153,8 +176,38 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         return basePackages;
     }
 
+    private String resolve(ConfigurableBeanFactory beanFactory, String value) {
+        if (StringUtils.hasText(value)) {
+            if (beanFactory == null) {
+                return this.environment.resolvePlaceholders(value);
+            }
+            BeanExpressionResolver resolver = beanFactory.getBeanExpressionResolver();
+            String resolved = beanFactory.resolveEmbeddedValue(value);
+            if (resolver == null) {
+                return resolved;
+            }
+            Object evaluateValue = resolver.evaluate(resolved, new BeanExpressionContext(beanFactory, null));
+            if (evaluateValue != null) {
+                return String.valueOf(evaluateValue);
+            }
+            return null;
+        }
+        return value;
+    }
 
-    private String getClientName(Map<String, Object> client) {
+    String getName(ConfigurableBeanFactory beanFactory, Map<String, Object> attributes) {
+        String name = (String) attributes.get("serviceId");
+        if (!StringUtils.hasText(name)) {
+            name = (String) attributes.get("name");
+        }
+        if (!StringUtils.hasText(name)) {
+            name = (String) attributes.get("value");
+        }
+        name = resolve(beanFactory, name);
+        return getName(name);
+    }
+
+    private String getChannelName(Map<String, Object> client) {
         if (client == null) {
             return null;
         }
@@ -170,7 +223,7 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         }
 
         throw new IllegalStateException("Either 'name' or 'value' must be provided in @"
-                + GrpcStubs.class.getSimpleName());
+                + GrpcChannel.class.getSimpleName());
     }
 
 }

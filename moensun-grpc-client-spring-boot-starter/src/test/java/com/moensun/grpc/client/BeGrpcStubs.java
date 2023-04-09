@@ -1,11 +1,11 @@
 package com.moensun.grpc.client;
 
-import com.moensun.grpc.client.annotations.GrpcStubs;
+import com.moensun.grpc.client.annotations.GrpcChannel;
 import io.grpc.ManagedChannel;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-@GrpcStubs
+@GrpcChannel
 public class BeGrpcStubs {
     private final ManagedChannel channel;
 }

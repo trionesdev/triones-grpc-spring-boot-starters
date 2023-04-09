@@ -1,11 +1,11 @@
 package com.moensun.grpc.client;
 
-import com.moensun.grpc.client.annotations.EnableGrpcStubs;
+import com.moensun.grpc.client.annotations.EnableGrpcChannels;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-@EnableGrpcStubs
+@EnableGrpcChannels
 public class GrpcStubSpringBootApp {
 
     public static void main(String[] args) {

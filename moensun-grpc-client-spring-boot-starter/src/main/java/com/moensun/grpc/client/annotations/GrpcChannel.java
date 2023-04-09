@@ -9,7 +9,7 @@ import java.lang.annotation.*;
 @Retention(RetentionPolicy.RUNTIME)
 @Documented
 @Inherited
-public @interface GrpcStubs {
+public @interface GrpcChannel {
     @AliasFor("name")
     String value() default "";
 

@@ -42,12 +42,13 @@ public class GrpcChannelFactoryBean implements FactoryBean<Channel>, Initializin
         this.applicationContext = applicationContext;
     }
 
-    protected ManagedChannelBuilder<?> grpcChannel(GrpcChannelContext context){
-        ManagedChannelBuilder<?> builder =  Grpc.newChannelBuilder(target, InsecureChannelCredentials.create());
+    protected ManagedChannelBuilder<?> grpcChannel(GrpcChannelContext context) {
+        ManagedChannelBuilder<?> builder = Grpc.newChannelBuilder(target, InsecureChannelCredentials.create())
+                .usePlaintext();
         return builder;
     }
 
-    protected Channel getTarget(){
+    protected Channel getTarget() {
         GrpcChannelContext context = beanFactory != null ? beanFactory.getBean(GrpcChannelContext.class)
                 : applicationContext.getBean(GrpcChannelContext.class);
 //        GrpcChannelContext contextntext = applicationContext.getBean(GrpcChannelContext.class);

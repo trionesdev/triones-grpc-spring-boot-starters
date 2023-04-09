@@ -9,12 +9,12 @@ import java.lang.annotation.*;
 @Target(ElementType.TYPE)
 @Documented
 @Import(value = {GrpcChannelsRegister.class})
-public @interface EnableGrpcStubs {
+public @interface EnableGrpcChannels {
     String[] value() default {};
 
     String[] basePackages() default {};
 
     Class<?>[] basePackageClasses() default {};
     Class<?>[] defaultConfiguration() default {};
-    Class<?>[] stubs() default {};
+    Class<?>[] channels() default {};
 }
