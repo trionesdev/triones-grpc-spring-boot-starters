@@ -4,13 +4,12 @@ import com.moensun.grpc.client.annotations.EnableGrpcChannels;
 import com.moensun.grpc.client.annotations.GrpcChannel;
 import io.grpc.CallOptions;
 import io.grpc.Channel;
+import io.grpc.ManagedChannel;
+import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.config.*;
-import org.springframework.beans.factory.support.AbstractBeanDefinition;
-import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.beans.factory.support.BeanDefinitionReaderUtils;
-import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.*;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.context.annotation.ClassPathScanningCandidateComponentProvider;
@@ -117,46 +116,40 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         ConfigurableBeanFactory beanFactory = registry instanceof ConfigurableBeanFactory
                 ? (ConfigurableBeanFactory) registry : null;
         Class<?> clazz = ClassUtils.resolveClassName(className, null);
-        String name = getName(beanFactory,attributes);
-        GrpcChannelFactoryBean factoryBean = new GrpcChannelFactoryBean();
-        factoryBean.setName(name);
-        factoryBean.setType(Channel.class);
-        factoryBean.setBeanFactory(beanFactory);
-        factoryBean.setTarget("localhost:50051");
-        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(Channel.class, () -> {
-            return factoryBean.getObject();
-        });
-        AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
-        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
-        definition.setLazyInit(true);
-
-        BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, null);
-        BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
-
-//        GrpcChannel grpcChannel = AnnotationUtils.findAnnotation(clazz, GrpcChannel.class);
-//        Arrays.stream(grpcChannel.stubs()).forEach(stubClass->{
-//            GrpcStubFactoryBean stubFactoryBean = new GrpcStubFactoryBean();
-//            stubFactoryBean.setBeanFactory(beanFactory);
-//            stubFactoryBean.setType(stubClass);
+//        String name = getName(beanFactory,attributes);
+//        GrpcChannelFactoryBean factoryBean = new GrpcChannelFactoryBean();
+//        factoryBean.setName(name);
+//        factoryBean.setType(Channel.class);
+//        factoryBean.setBeanFactory(beanFactory);
+//        factoryBean.setTarget("localhost:50051");
+//        BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(Channel.class, () -> {
+//            return factoryBean.getObject();
+//        });
+//        AbstractBeanDefinition beanDefinition = definition.getBeanDefinition();
+//        definition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
+//        definition.setLazyInit(true);
 //
-//            BeanDefinitionBuilder stubBeanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(stubClass,()->{
-//                return stubFactoryBean.getObject();
-//            });
+//        BeanDefinitionHolder holder = new BeanDefinitionHolder(beanDefinition, className, null);
+//        BeanDefinitionReaderUtils.registerBeanDefinition(holder, registry);
+
+
+       ManagedChannel channel = ManagedChannelBuilder.forTarget("localhost:50051").build();
+
+        GrpcChannel grpcChannel = AnnotationUtils.findAnnotation(clazz, GrpcChannel.class);
+        Arrays.stream(grpcChannel.stubs()).forEach(stubClass->{
+            System.out.println("ss");
+//            BeanDefinitionBuilder stubBeanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(stubClass);
 //            AbstractBeanDefinition stubBeanDefinition = stubBeanDefinitionBuilder.getBeanDefinition();
-////            stubBeanDefinition.setAttribute("channel",beanDefinition);
-////            stubBeanDefinition.setAttribute("callOptions", CallOptions.DEFAULT);
+//            GenericBeanDefinition stubBeanDefinition = new GenericBeanDefinition();
+//            stubBeanDefinition.setBeanClass(stubClass);
+//            stubBeanDefinition.setAttribute("channel",channel);
+//            stubBeanDefinition.setAttribute("callOptions", CallOptions.DEFAULT);
 //            stubBeanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 //            stubBeanDefinition.setLazyInit(true);
-//
-//
-//            BeanDefinitionHolder holder1 = new BeanDefinitionHolder(stubBeanDefinition, stubClass.getSimpleName(), null);
-//            BeanDefinitionReaderUtils.registerBeanDefinition(holder1, registry);
-//
-//        });
+//            BeanDefinitionHolder stubHolder = new BeanDefinitionHolder(stubBeanDefinition, stubClass.getSimpleName(), null);
+//            BeanDefinitionReaderUtils.registerBeanDefinition(stubHolder, registry);
 
-
-//        GrpcChannelContext context =  beanFactory.getBean(GrpcChannelContext.class);
-
+        });
     }
 
     protected ClassPathScanningCandidateComponentProvider getScanner() {
