@@ -75,7 +75,7 @@ public class GrpcServerLifecycle implements SmartLifecycle {
         LinkedMultiValueMap<String, ServerInterceptor> serverInterceptorsMap = findServerInterceptors();
         Map<String, GrpcServerProperties> grpcServersMap = grpcServerConfProperties.getMulti();
         if (CollectionUtil.isEmpty(grpcServersMap)) {
-            String serverName = StrUtil.isNotBlank(grpcServerConfProperties.getServerName()) ? grpcServerConfProperties.getServerName() : DEFAULT_GRPC_SERVER_NAME;
+            String serverName = StrUtil.isNotBlank(grpcServerConfProperties.getName()) ? grpcServerConfProperties.getName() : DEFAULT_GRPC_SERVER_NAME;
             Server server = createAndStartServer(grpcServerConfProperties, serverServiceDefinitions.get(DEFAULT_GRPC_SERVER_NAME), serverInterceptorsMap.get(DEFAULT_GRPC_SERVER_NAME));
             awaitTermination(server);
             grpcServers.put(serverName, server);
@@ -83,7 +83,7 @@ public class GrpcServerLifecycle implements SmartLifecycle {
             for (Map.Entry<String, GrpcServerProperties> entry : grpcServersMap.entrySet()) {
                 String k = entry.getKey();
                 GrpcServerProperties v = entry.getValue();
-                String serverName = StrUtil.isNotBlank(v.getServerName()) ? v.getServerName() : k;
+                String serverName = StrUtil.isNotBlank(v.getName()) ? v.getName() : k;
                 Server server = createAndStartServer(v, serverServiceDefinitions.get(serverName), serverInterceptorsMap.get(serverName));
                 awaitTermination(server);
                 grpcServers.put(serverName, server);
