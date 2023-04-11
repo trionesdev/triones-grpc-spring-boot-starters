@@ -1,7 +1,6 @@
 package com.moensun.grpc.client;
 
 import io.grpc.Channel;
-import io.grpc.ManagedChannel;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -54,10 +53,7 @@ public class GrpcChannelFactoryBean implements FactoryBean<Channel>, Initializin
 //        GrpcChannelContext contextntext = applicationContext.getBean(GrpcChannelContext.class);
         ManagedChannelBuilder<?> builder = grpcChannel(context);
 
-        ManagedChannel channel = builder.build();
-        context.registerChannel(name,channel);
-
-        return channel;
+        return builder.build();
     }
 
 

@@ -72,8 +72,8 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
     public void registerGrpcChannels(AnnotationMetadata metadata, BeanDefinitionRegistry registry) {
         LinkedHashSet<BeanDefinition> candidateComponents = new LinkedHashSet<>();
         Map<String, Object> attrs = metadata.getAnnotationAttributes(EnableGrpcChannels.class.getName());
-        final Class<?>[] stubs = attrs == null ? null : (Class<?>[]) attrs.get("channels");
-        if (stubs == null || stubs.length == 0) {
+        final Class<?>[] channels = attrs == null ? null : (Class<?>[]) attrs.get("channels");
+        if (channels == null || channels.length == 0) {
             ClassPathScanningCandidateComponentProvider scanner = getScanner();
             scanner.setResourceLoader(this.resourceLoader);
             scanner.addIncludeFilter(new AnnotationTypeFilter(GrpcChannel.class));
@@ -82,7 +82,7 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
                 candidateComponents.addAll(scanner.findCandidateComponents(basePackage));
             }
         } else {
-            for (Class<?> clazz : stubs) {
+            for (Class<?> clazz : channels) {
                 candidateComponents.add(new AnnotatedGenericBeanDefinition(clazz));
             }
         }
