@@ -3,10 +3,10 @@
     <modelVersion>4.0.0</modelVersion>
     <parent>
         <groupId>com.moensun.grpc</groupId>
-        <artifactId>moensun-grpc-spring-boot-starters</artifactId>
+        <artifactId>grpc-spring-boot-starters</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>moensun-grpc-client-spring-boot-starter</artifactId>
+    <artifactId>grpc-client-spring-boot-starter</artifactId>
     <name>MS:Grpc:Client:Starter</name>
     <url>http://maven.apache.org</url>
 

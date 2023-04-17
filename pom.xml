@@ -5,13 +5,13 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.moensun.grpc</groupId>
-    <artifactId>moensun-grpc-spring-boot-starters</artifactId>
+    <artifactId>grpc-spring-boot-starters</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <name>MS:Grpc:Starters</name>
     <modules>
-        <module>moensun-grpc-server-spring-boot-starter</module>
-        <module>moensun-grpc-client-spring-boot-starter</module>
+        <module>grpc-server-spring-boot-starter</module>
+        <module>grpc-client-spring-boot-starter</module>
     </modules>
 
     <properties>
