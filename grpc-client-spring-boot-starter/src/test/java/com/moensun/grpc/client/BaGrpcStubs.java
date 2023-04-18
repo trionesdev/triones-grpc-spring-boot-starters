@@ -1,6 +1,6 @@
 package com.moensun.grpc.client;
 
-import com.moensun.grpc.client.annotations.GrpcChannel;
+import com.moensun.grpc.client.annotation.GrpcChannel;
 import io.opentelemetry.example.grpc.GreeterGrpc;
 
 

@@ -1,6 +1,5 @@
-package com.moensun.grpc.client.annotations;
+package com.moensun.grpc.client.annotation;
 
-import io.grpc.stub.AbstractBlockingStub;
 import io.grpc.stub.AbstractStub;
 import org.springframework.core.annotation.AliasFor;
 

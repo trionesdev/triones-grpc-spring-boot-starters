@@ -1,7 +1,7 @@
 package com.moensun.grpc.server.autoconfigure;
 
 import com.moensun.grpc.server.GrpcServerLifecycle;
-import com.moensun.grpc.server.annotations.GrpcService;
+import com.moensun.grpc.server.annotation.GrpcService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
@@ -14,9 +14,9 @@ import org.springframework.context.support.GenericApplicationContext;
 @RequiredArgsConstructor
 @Configuration
 @ConditionalOnBean(annotation = GrpcService.class)
-@EnableConfigurationProperties(value = {GrpcServerConfProperties.class})
+@EnableConfigurationProperties(value = {GrpcServerProperties.class})
 public class GrpcServerAutoConfiguration {
-    private final GrpcServerConfProperties serverProperties;
+    private final GrpcServerProperties serverProperties;
 
     @Bean
     public GrpcServerLifecycle grpcServerLifecycle(GenericApplicationContext applicationContext) {

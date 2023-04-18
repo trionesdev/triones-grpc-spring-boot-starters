@@ -1,6 +1,6 @@
 package com.moensun.grpc.server;
 
-import com.moensun.grpc.server.annotations.GrpcService;
+import com.moensun.grpc.server.annotation.GrpcService;
 import io.grpc.stub.StreamObserver;
 import io.opentelemetry.example.grpc.GreeterGrpc;
 import io.opentelemetry.example.grpc.HelloReply;

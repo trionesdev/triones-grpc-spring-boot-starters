@@ -98,6 +98,16 @@
                 <version>5.8.16</version>
             </dependency>
 
+            <dependency>
+                <groupId>com.moensun.grpc</groupId>
+                <artifactId>grpc-client-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.moensun.grpc</groupId>
+                <artifactId>grpc-server-spring-boot-starter</artifactId>
+                <version>${project.version}</version>
+            </dependency>
         </dependencies>
     </dependencyManagement>
 

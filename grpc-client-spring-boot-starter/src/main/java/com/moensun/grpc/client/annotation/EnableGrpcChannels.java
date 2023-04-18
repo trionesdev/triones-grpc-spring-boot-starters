@@ -1,4 +1,4 @@
-package com.moensun.grpc.client.annotations;
+package com.moensun.grpc.client.annotation;
 
 import com.moensun.grpc.client.GrpcChannelsRegister;
 import org.springframework.context.annotation.Import;

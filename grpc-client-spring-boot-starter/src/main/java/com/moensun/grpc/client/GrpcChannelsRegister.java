@@ -1,8 +1,8 @@
 package com.moensun.grpc.client;
 
 import cn.hutool.core.util.ArrayUtil;
-import com.moensun.grpc.client.annotations.EnableGrpcChannels;
-import com.moensun.grpc.client.annotations.GrpcChannel;
+import com.moensun.grpc.client.annotation.EnableGrpcChannels;
+import com.moensun.grpc.client.annotation.GrpcChannel;
 import io.grpc.Channel;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;

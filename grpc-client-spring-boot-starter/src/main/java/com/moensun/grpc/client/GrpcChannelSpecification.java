@@ -44,9 +44,9 @@ public class GrpcChannelSpecification implements NamedContextFactory.Specificati
 
     @Override
     public String toString() {
-        return new StringBuilder("GrpcStubSpecification{")
-                .append("name='").append(name).append("', ")
-                .append("configuration=").append(Arrays.toString(configuration))
-                .append("}").toString();
+        return "GrpcStubSpecification{" +
+                "name='" + name + "', " +
+                "configuration=" + Arrays.toString(configuration) +
+                "}";
     }
 }

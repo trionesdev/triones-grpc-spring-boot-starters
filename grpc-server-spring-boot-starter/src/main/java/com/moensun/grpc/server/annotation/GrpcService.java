@@ -1,4 +1,4 @@
-package com.moensun.grpc.server.annotations;
+package com.moensun.grpc.server.annotation;
 
 import io.grpc.ServerInterceptor;
 import org.springframework.core.annotation.AliasFor;

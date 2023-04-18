@@ -2,9 +2,8 @@ package com.moensun.grpc.server;
 
 import cn.hutool.core.collection.CollectionUtil;
 import com.google.common.collect.Lists;
-import com.moensun.grpc.server.annotations.GrpcGlobalServerInterceptor;
-import com.moensun.grpc.server.annotations.GrpcService;
-import com.moensun.grpc.server.autoconfigure.GrpcServerConfProperties;
+import com.moensun.grpc.server.annotation.GrpcGlobalServerInterceptor;
+import com.moensun.grpc.server.annotation.GrpcService;
 import com.moensun.grpc.server.autoconfigure.GrpcServerProperties;
 import io.grpc.*;
 import lombok.extern.slf4j.Slf4j;
@@ -18,13 +17,13 @@ import java.util.*;
 public class GrpcServerLifecycle implements SmartLifecycle {
     private boolean running = false;
 
-    private final GrpcServerConfProperties grpcServerConfProperties;
+    private final GrpcServerProperties grpcServerConfProperties;
     private final GenericApplicationContext applicationContext;
 
     private final Map<String, Server> grpcServers = new HashMap<>();
     private Server server;
 
-    public GrpcServerLifecycle(GrpcServerConfProperties grpcServerConfProperties, GenericApplicationContext applicationContext) {
+    public GrpcServerLifecycle(GrpcServerProperties grpcServerConfProperties, GenericApplicationContext applicationContext) {
         this.grpcServerConfProperties = grpcServerConfProperties;
         this.applicationContext = applicationContext;
     }

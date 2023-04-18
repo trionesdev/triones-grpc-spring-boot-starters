@@ -1,6 +1,6 @@
 package com.moensun.grpc.server;
 
-import com.moensun.grpc.server.annotations.GrpcGlobalServerInterceptor;
+import com.moensun.grpc.server.annotation.GrpcGlobalServerInterceptor;
 import io.grpc.Metadata;
 import io.grpc.ServerCall;
 import io.grpc.ServerCallHandler;

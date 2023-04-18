@@ -1,4 +1,4 @@
-package com.moensun.grpc.server.annotations;
+package com.moensun.grpc.server.annotation;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.stereotype.Component;
