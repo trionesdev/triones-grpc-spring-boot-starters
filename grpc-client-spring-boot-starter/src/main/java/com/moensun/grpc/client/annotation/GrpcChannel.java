@@ -17,6 +17,7 @@ public @interface GrpcChannel {
     String name() default "";
 
     String serverName() default "";
+    String target() default "";
 
     Class<?>[] configuration() default {};
 

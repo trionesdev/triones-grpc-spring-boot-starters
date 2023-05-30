@@ -120,7 +120,7 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
         factoryBean.setName(name);
         factoryBean.setType(Channel.class);
         factoryBean.setBeanFactory(beanFactory);
-        factoryBean.setTarget("localhost:50051");
+        factoryBean.setTarget(getTarget(beanFactory, attributes));
         BeanDefinitionBuilder definition = BeanDefinitionBuilder.genericBeanDefinition(Channel.class, () -> {
             return factoryBean.getObject();
         });
@@ -244,6 +244,12 @@ public class GrpcChannelsRegister implements ImportBeanDefinitionRegistrar, Reso
 
         throw new IllegalStateException("Either 'name' or 'value' must be provided in @"
                 + GrpcChannel.class.getSimpleName());
+    }
+
+    String getTarget(ConfigurableBeanFactory beanFactory, Map<String, Object> attributes) {
+        String name = (String) attributes.get("target");
+        name = resolve(beanFactory, name);
+        return getName(name);
     }
 
 }
