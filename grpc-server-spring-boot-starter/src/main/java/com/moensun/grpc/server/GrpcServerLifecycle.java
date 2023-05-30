@@ -88,7 +88,7 @@ public class GrpcServerLifecycle implements SmartLifecycle {
             if (Objects.isNull(grpcService)) {
                 serverServiceDefinitions.add(bindableService.bindService());
             } else {
-                serverServiceDefinition(grpcService, bindableService);
+                serverServiceDefinitions.add(serverServiceDefinition(grpcService, bindableService));
             }
         });
         return serverServiceDefinitions;

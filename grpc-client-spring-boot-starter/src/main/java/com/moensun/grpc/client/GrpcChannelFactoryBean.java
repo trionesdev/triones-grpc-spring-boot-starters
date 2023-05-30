@@ -1,6 +1,7 @@
 package com.moensun.grpc.client;
 
 import io.grpc.Channel;
+import io.grpc.ClientInterceptor;
 import io.grpc.ManagedChannelBuilder;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanFactory;
@@ -10,6 +11,10 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.util.Assert;
+
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class GrpcChannelFactoryBean implements FactoryBean<Channel>, InitializingBean,
         ApplicationContextAware, BeanFactoryAware {
@@ -41,7 +46,9 @@ public class GrpcChannelFactoryBean implements FactoryBean<Channel>, Initializin
     }
 
     protected ManagedChannelBuilder<?> grpcChannel(GrpcChannelContext context) {
+        Map<String,ClientInterceptor> clientInterceptorMap = context.getInstances(name, ClientInterceptor.class);
         ManagedChannelBuilder<?> builder = ManagedChannelBuilder.forTarget(target)
+                .intercept(new ArrayList<>(clientInterceptorMap.values()))
                 .usePlaintext();
 
         return builder;

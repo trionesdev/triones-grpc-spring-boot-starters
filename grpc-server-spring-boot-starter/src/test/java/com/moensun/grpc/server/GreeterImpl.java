@@ -8,7 +8,7 @@ import io.opentelemetry.example.grpc.HelloRequest;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
-@GrpcService(interceptors = {BGrpcServerInterceptor.class})
+@GrpcService(interceptors = {})
 public class GreeterImpl extends GreeterGrpc.GreeterImplBase {
     @Override
     public void sayHello(HelloRequest req, StreamObserver<HelloReply> responseObserver) {

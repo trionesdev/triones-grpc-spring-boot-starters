@@ -20,7 +20,7 @@ public class GrpcChannelSpecification implements NamedContextFactory.Specificati
 
     @Override
     public String getName() {
-        return null;
+        return name;
     }
 
     @Override
