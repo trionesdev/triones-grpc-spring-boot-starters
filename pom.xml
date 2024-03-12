@@ -4,14 +4,14 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.moensun.grpc</groupId>
-    <artifactId>grpc-spring-boot-starters</artifactId>
+    <groupId>com.trionesdev.grpc</groupId>
+    <artifactId>triones-grpc-spring-boot-starters</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
-    <name>MS:Grpc:Starters</name>
+    <name>Triones:Grpc:Starters</name>
     <modules>
-        <module>grpc-server-spring-boot-starter</module>
-        <module>grpc-client-spring-boot-starter</module>
+        <module>triones-grpc-server-spring-boot-starter</module>
+        <module>triones-grpc-client-spring-boot-starter</module>
     </modules>
 
     <properties>
